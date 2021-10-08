@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "ANSITerminal",
+        "repositoryURL": "https://github.com/pakLebah/ANSITerminal",
+        "state": {
+          "branch": null,
+          "revision": "8e24fab68c660eca1244a95019ec69a11400d62b",
+          "version": "0.0.3"
+        }
+      },
+      {
+        "package": "Rainbow",
+        "repositoryURL": "https://github.com/onevcat/Rainbow",
+        "state": {
+          "branch": null,
+          "revision": "e0dada9cd44e3fa7ec3b867e49a8ddbf543e3df3",
+          "version": "4.0.1"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
