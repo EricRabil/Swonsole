@@ -114,22 +114,18 @@ public class ListRenderer<Element: CustomStringConvertible> {
         }
     }
     
+    internal var rows: Int {
+        visibleItems.count
+    }
+    
     public func render() {
         let visibleItems = visibleItems
-        
-        if initialRender {
-            initialRender = false
-        } else {
-            write(ANSIEscape.eraseLines(count: visibleItems.count))
-        }
         
         for (visibleIndex, index) in visibleItems.enumerated() {
             let rendered = render(index: index, active: index == activeIndex)
             let end = visibleIndex != visibleItems.lastIndex ? "\n" : ""
             write(rendered + end)
         }
-        
-        write(ANSIEscape.cursorLeft)
     }
 }
 
