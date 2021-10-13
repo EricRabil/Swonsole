@@ -29,8 +29,8 @@ public extension ANSIViewRenderer {
         }
         
         ANSIScreen.cursorOn()
-        
         ANSITerminal.restoreInitialMode()
+        ANSISource.shared.disable()
     }
 }
 

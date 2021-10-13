@@ -112,6 +112,22 @@ public extension ANSIView {
     }
     
     @discardableResult
+    func registerSinglePreRenderLink(_ callback: @escaping () -> ()) -> (() -> ())? {
+        var remove: (() -> ())?
+        
+        guard let removeFn = viewLink?.insertPre ({ _ in
+            remove?()
+            callback()
+        }) else {
+            return nil
+        }
+        
+        remove = removeFn
+        
+        return removeFn
+    }
+    
+    @discardableResult
     func registerPostRenderLink(_ callback: @escaping (Int) -> ()) -> (() -> ())? {
         viewLink?.insertPost(callback)
     }

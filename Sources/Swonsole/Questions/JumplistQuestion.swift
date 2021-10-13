@@ -38,8 +38,12 @@ public final class JumplistQuestion: Question, ListBasedQuestion, ANSIView, ANSI
             return
         }
         
-        self.list.activeIndex = self.chars.firstIndex(of: payload.chars[0])!
-        self.registerSinglePostRenderLink { self.submit(self.list) }
+        self.registerSinglePreRenderLink {
+            self.list.activeIndex = self.chars.firstIndex(of: payload.chars[0])!
+            self.registerSinglePostRenderLink {
+                self.end(withCharacter: payload.chars[0])
+            }
+        }
     }
     
     public init(prompt: String, input: [(Character, String)], _ callback: ((Character) -> ())? = nil) {
