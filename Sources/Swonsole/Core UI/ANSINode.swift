@@ -12,7 +12,18 @@ open class ANSINode: Clashable {
     public fileprivate(set) var children: [ANSINode] = [] // children of this node
     public fileprivate(set) var isMounted: Bool = false
     
+    open var hidden = false
+    
     public init() {}
+    public init(children: [ANSINode]) {
+        for child in children {
+            append(node: child)
+        }
+    }
+    
+    public convenience init(_ children: ANSINode...) {
+        self.init(children: children)
+    }
     
     open func render(withWidth width: Int) -> [String] {
         []

@@ -97,9 +97,7 @@ public class ANSIInputManager: ANSITerminalDelegate {
 
 internal extension ANSIInputManager {
     func terminal(_ terminal: ANSITerminal, receivedInput event: ANSIInputEvent) {
-        for node in activeNodes.values {
-            node.inputEventReceived(event)
-        }
+        dispatch(event: event)
     }
 }
 

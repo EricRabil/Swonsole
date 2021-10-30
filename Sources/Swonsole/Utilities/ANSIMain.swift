@@ -19,3 +19,23 @@ public func ANSIMain(_ callback: () -> ()) {
     
     dispatchMain()
 }
+
+public func ANSIMain(_ nodes: [ANSINode]) {
+    ANSIMain {
+        let root = ANSIRootNode(children: nodes)
+        
+        ANSINodeRenderer.shared.mount(node: root)
+    }
+}
+
+public func ANSIMain(_ nodes: ANSINode...) {
+    ANSIMain {
+        let root = ANSIRootNode(children: nodes)
+        
+        ANSINodeRenderer.shared.mount(node: root)
+    }
+}
+
+public func ANSIMain(@ANSINodeBuilder _ tree: () -> [ANSINode]) {
+    ANSIMain(tree())
+}

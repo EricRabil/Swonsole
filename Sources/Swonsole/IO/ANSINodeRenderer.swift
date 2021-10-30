@@ -85,7 +85,7 @@ public extension ANSINodeRenderer {
 // MARK: - Mount/unmount
 
 public extension ANSINodeRenderer {
-    func mount(node: ANSIRootNode, position: Int? = nil) {
+    func mount(node: ANSIRootNode, position: Int?) {
         guard !nodes.contains(object: node) else {
             return
         }
@@ -98,6 +98,10 @@ public extension ANSINodeRenderer {
         
         node.enteredRenderer()
         node.emitMounted()
+    }
+    
+    func mount(node: ANSIRootNode) {
+        mount(node: node, position: nil)
     }
     
     func unmount(node: ANSIRootNode) {

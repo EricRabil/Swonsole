@@ -8,6 +8,10 @@
 import Foundation
 
 public func ANSIRenderNode(_ node: ANSINode, withWidth width: Int) -> [String] {
+    if node.hidden {
+        return []
+    }
+    
     var rows = node.render(withWidth: width)
     
     if node is ANSINodeCustomCompositing {
@@ -15,6 +19,10 @@ public func ANSIRenderNode(_ node: ANSINode, withWidth width: Int) -> [String] {
     }
     
     node.walkChildren { node -> Bool in
+        if node.hidden {
+            return false
+        }
+        
         rows += node.render(withWidth: width)
         
         return !(node is ANSINodeCustomCompositing)
@@ -28,6 +36,10 @@ public class ANSIRootNode: ANSINode {
         var rows = [String]()
         
         walkChildren { node -> Bool in
+            if node.hidden {
+                return false
+            }
+            
             rows += node.render(withWidth: width)
             
             return !(node is ANSINodeCustomCompositing)

@@ -14,7 +14,7 @@ internal protocol ANSITerminalDelegate {
 }
 
 @usableFromInline internal class ANSITerminal {
-    static let shared = ANSITerminal()
+    @usableFromInline static let shared = ANSITerminal()
     
     private init() {
         source.setEventHandler {
@@ -61,14 +61,23 @@ internal protocol ANSITerminalDelegate {
     }
 }
 
+extension FileHandle: TextOutputStream {
+  public func write(_ string: String) {
+    let data = Data(string.utf8)
+    self.write(data)
+  }
+}
+
 extension ANSITerminal {
-    @_optimize(speed) @inlinable func write(_ text: String) {
-        let _ = Darwin.write(STDOUT_FILENO, text, text.utf8.count)
+    @usableFromInline static var stdout = FileHandle.standardOutput
+    
+    @_optimize(speed) @inlinable func write<Text: StringProtocol>(text: Text) {
+        text.write(to: &Self.stdout)
     }
     
     @_optimize(speed) @inlinable func write(_ text: String...) {
         for text in text {
-            self.write(text)
+            self.write(text: text)
         }
     }
 }
