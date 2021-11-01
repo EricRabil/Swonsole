@@ -88,6 +88,7 @@ public extension Array where Element == ANSIHorizontalRule {
         let sizings = sizing(forWidth: width)
         
         var rows: [String] = []
+        var offset = 0
         
         for columnIndex in indices {
             guard let sizing = sizings[columnIndex], sizing >= 0 else {
@@ -98,7 +99,7 @@ public extension Array where Element == ANSIHorizontalRule {
             
             for (index, row) in nodeRows.enumerated() {
                 if index == rows.count {
-                    rows.append("") // grow the rows array if theres no row for this already
+                    rows.append(.spaces(repeating: offset)) // grow the rows array if theres no row for this already
                 }
                 
                 rows[index] += row // append this section of the node to the row
@@ -111,6 +112,8 @@ public extension Array where Element == ANSIHorizontalRule {
                     rows[index] += String.spaces(repeating: sizing - row.count)
                 }
             }
+            
+            offset += sizing
         }
         
         return rows
