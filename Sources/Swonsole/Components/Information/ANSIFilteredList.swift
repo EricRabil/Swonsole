@@ -33,6 +33,11 @@ open class ANSIFilteredList: ANSINode, ANSINodeMinimumHeightConstraining {
         append(node: textField)
     }
     
+    open func replaceDelegate(newDelegate: ANSIFilteredListDelegate?) {
+        list.delegate = newDelegate
+        textField.delegate = newDelegate
+    }
+    
     open override func mounted() {
         activate()
     }
