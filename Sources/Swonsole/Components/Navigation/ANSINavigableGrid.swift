@@ -25,17 +25,13 @@ open class ANSINavigableGrid: ANSIRowGroup {
     
     open var enabled: Bool = false {
         didSet {
-            stopInput?()
-            
             if enabled {
-                stopInput = ANSIInputManager.shared.subscribe(callback: inputEventReceived(_:))
+                receiveDetachedInput()
             } else {
-                stopInput = nil
+                stopReceivingDetachedInput()
             }
         }
     }
-    
-    private var stopInput: (() -> ())?
     
     open override func mounted() {
         enabled = true
