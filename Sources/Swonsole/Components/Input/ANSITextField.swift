@@ -151,6 +151,8 @@ open class ANSITextField: ANSINode {
                 switch char {
                 case "\u{1B}":
                     break
+                case "\t":
+                    break
                 case "\r":
                     fallthrough
                 case "\n":
