@@ -1,3 +1,3 @@
 # Swonsole
 
-Paginated selection lists for the terminal.
+ANSI UI framework for Swift
