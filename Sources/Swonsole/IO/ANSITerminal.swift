@@ -13,8 +13,8 @@ internal protocol ANSITerminalDelegate {
     func terminal(_ terminal: ANSITerminal, receivedInput event: ANSIInputEvent)
 }
 
-@usableFromInline internal class ANSITerminal {
-    @usableFromInline static let shared = ANSITerminal()
+public class ANSITerminal {
+    public static let shared = ANSITerminal()
     
     private init() {
         source.setEventHandler {
@@ -27,12 +27,12 @@ internal protocol ANSITerminalDelegate {
     }
     
     var delegate: ANSITerminalDelegate?
-    let source: DispatchSourceRead = DispatchSource.makeReadSource(fileDescriptor: STDIN_FILENO, queue: .global(qos: .userInteractive))
+    public let source: DispatchSourceRead = DispatchSource.makeReadSource(fileDescriptor: STDIN_FILENO, queue: .global(qos: .userInteractive))
     
     private var processingCommand = false
     private let lock = NSRecursiveLock()
     
-    func request(_ command: String, terminator: Character) -> String {
+    public func request(_ command: String, terminator: Character) -> String {
         lock.lock()
         processingCommand = true
         
@@ -63,16 +63,23 @@ internal protocol ANSITerminalDelegate {
 
 extension FileHandle: TextOutputStream {
   public func write(_ string: String) {
-    let data = Data(string.utf8)
-    self.write(data)
+    self.write(Data(string.utf8))
   }
+}
+
+extension StringProtocol {
+    @usableFromInline var dispatchData: DispatchData {
+        Data(utf8).withUnsafeBytes {
+            DispatchData(bytes: $0)
+        }
+    }
 }
 
 extension ANSITerminal {
     @usableFromInline static var stdout = FileHandle.standardOutput
     
     @_optimize(speed) @inlinable func write<Text: StringProtocol>(text: Text) {
-        text.write(to: &Self.stdout)
+        DispatchIO.write(toFileDescriptor: STDOUT_FILENO, data: text.dispatchData, runningHandlerOn: .global(qos: .userInteractive)) { _,_ in }
     }
     
     @_optimize(speed) @inlinable func write(_ text: String...) {
@@ -136,7 +143,7 @@ extension ANSITerminal {
 
 // MARK: - Raw Mode
 
-extension ANSITerminal {
+public extension ANSITerminal {
     static var defaultTerminal: termios = {
         var term = termios()
         
